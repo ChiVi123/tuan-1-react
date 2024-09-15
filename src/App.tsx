@@ -6,14 +6,18 @@ import { bankruptMoney, bankSelectTotal, depositMoney, withdrawMoney } from './s
 function App() {
     const dispatch = useDispatch();
     const state = useSelector(bankSelectTotal);
+    const money: number = 100;
+
+    console.log('re-render');
+
     return (
         <div className='App'>
             <h1>{state}</h1>
-            <button type='button' onClick={() => dispatch(depositMoney(100))}>
+            <button type='button' onClick={() => dispatch(depositMoney(money))}>
                 Deposit
             </button>
 
-            <button type='button' onClick={() => dispatch(withdrawMoney(100))}>
+            <button type='button' onClick={() => dispatch(withdrawMoney(money))}>
                 Withdraw
             </button>
 

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import Content from './components/content';
+import Content from './components/Content';
 
 function UseCallbackExample() {
     const [counter, setCounter] = useState<number>(0);
