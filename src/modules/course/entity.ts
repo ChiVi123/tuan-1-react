@@ -6,3 +6,4 @@ export default interface ICourse {
     image: string;
     videoId: string;
 }
+export type CourseData = ICourse & { key: string };
