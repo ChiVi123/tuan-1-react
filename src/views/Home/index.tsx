@@ -61,8 +61,6 @@ function Home() {
         console.log('delete success');
     };
 
-    console.log(state.data.map((item) => item.id));
-
     return (
         <Space direction='vertical' className='w-full'>
             <Flex justify='space-between'>
