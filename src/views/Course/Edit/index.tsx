@@ -1,33 +1,34 @@
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
-import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import firestore from '../../../config/firestore';
-import { editCourse } from '../../../modules/course';
+import { useNavigate, useParams } from 'react-router-dom';
+import { editCourse, getCourse } from '../../../modules/course';
 import ICourse from '../../../modules/course/entity';
 
 function EditCourse() {
     const { id } = useParams();
     const [course, setCourse] = useState<ICourse>();
-    const getCourse = doc(firestore, `courses/${id}`);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        (async function () {
-            const docSnap = await getDoc(getCourse);
+        (async function (id: string) {
+            const docSnap = await getCourse(id);
             if (docSnap.exists()) {
                 setCourse({ id: docSnap.id, ...docSnap.data() } as ICourse);
             } else {
                 console.log('No such document');
             }
-        })();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        })(id || '');
+    }, [id, navigate]);
 
     const onFinish: FormProps<ICourse>['onFinish'] = async (values) => {
         const result = await editCourse(id || '', values);
-        console.log('edit course::', result);
+        if (result.success) {
+            navigate('/');
+            console.log('edit course::', result);
+        } else {
+            console.log('cannot edit course');
+        }
     };
 
     const onFinishFailed: FormProps<ICourse>['onFinishFailed'] = (errorInfo) => {
@@ -50,7 +51,7 @@ function EditCourse() {
             autoComplete='off'
         >
             <Form.Item<ICourse>
-                label='Ten khoa hoc'
+                label='Tên khóa học'
                 name='name'
                 rules={[{ required: true, message: 'Please input your name!' }]}
             >
@@ -58,7 +59,7 @@ function EditCourse() {
             </Form.Item>
 
             <Form.Item<ICourse>
-                label='Mo ta'
+                label='Mô tả'
                 name='description'
                 rules={[{ required: true, message: 'Please input your description!' }]}
             >
@@ -66,7 +67,7 @@ function EditCourse() {
             </Form.Item>
 
             <Form.Item<ICourse>
-                label='Trinh do'
+                label='Trình độ'
                 name='level'
                 rules={[{ required: true, message: 'Please input your level!' }]}
             >
@@ -74,7 +75,7 @@ function EditCourse() {
             </Form.Item>
 
             <Form.Item<ICourse>
-                label='Hinh anh'
+                label='Hình ảnh'
                 name='image'
                 rules={[{ required: true, message: 'Please input your image!' }]}
             >
@@ -91,7 +92,7 @@ function EditCourse() {
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type='primary' htmlType='submit'>
-                    Submit
+                    Lưu
                 </Button>
             </Form.Item>
         </Form>

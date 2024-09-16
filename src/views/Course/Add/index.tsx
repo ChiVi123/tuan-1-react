@@ -1,12 +1,20 @@
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { addCourse } from '../../../modules/course';
 import ICourse from '../../../modules/course/entity';
 
 function AddCourse() {
+    const navigate = useNavigate();
+
     const onFinish: FormProps<ICourse>['onFinish'] = async (values) => {
         const result = await addCourse(values);
-        console.log('add course::', result);
+        if (result.success) {
+            navigate('/');
+            console.log('add course::', result);
+        } else {
+            console.log('can not add course');
+        }
     };
 
     const onFinishFailed: FormProps<ICourse>['onFinishFailed'] = (errorInfo) => {
@@ -25,7 +33,7 @@ function AddCourse() {
             autoComplete='off'
         >
             <Form.Item<ICourse>
-                label='Ten khoa hoc'
+                label='Tên khóa học'
                 name='name'
                 rules={[{ required: true, message: 'Please input your name!' }]}
             >
@@ -33,7 +41,7 @@ function AddCourse() {
             </Form.Item>
 
             <Form.Item<ICourse>
-                label='Mo ta'
+                label='Mô tả'
                 name='description'
                 rules={[{ required: true, message: 'Please input your description!' }]}
             >
@@ -41,7 +49,7 @@ function AddCourse() {
             </Form.Item>
 
             <Form.Item<ICourse>
-                label='Trinh do'
+                label='Trình độ'
                 name='level'
                 rules={[{ required: true, message: 'Please input your level!' }]}
             >
@@ -49,7 +57,7 @@ function AddCourse() {
             </Form.Item>
 
             <Form.Item<ICourse>
-                label='Hinh anh'
+                label='Hình ảnh'
                 name='image'
                 rules={[{ required: true, message: 'Please input your image!' }]}
             >
@@ -66,7 +74,7 @@ function AddCourse() {
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type='primary' htmlType='submit'>
-                    Submit
+                    Lưu
                 </Button>
             </Form.Item>
         </Form>
